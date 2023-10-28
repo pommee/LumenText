@@ -2,7 +2,7 @@
 
 LuminText is a simple and intuitive text editor built using Python's tkinter library. It provides a user-friendly interface for creating and editing text files, along with basic file management functionalities. With its minimalist design and essential features, LuminText offers a hassle-free experience for users to write and edit text conveniently.
 
-![preview](preview.png)
+![preview](./resources/preview.png)
 Image of an early version compared to VSCode.
 
 ## Features

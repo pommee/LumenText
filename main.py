@@ -12,5 +12,5 @@ if __name__ == "__main__":
     root.bind("<q>", lambda event: handle_key_event(event, "q"))
     root.bind("<Control-s>", lambda event: save_file())
 
-    root.iconbitmap('l-solid.ico')
+    root.iconbitmap('./resources/l-solid.ico')
     root.mainloop()
