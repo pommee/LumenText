@@ -1,14 +1,21 @@
 import tkinter as tk
 import os
+from idlelib.percolator import Percolator
+from idlelib.colorizer import ColorDelegator
+import re
+
+background_color = "#313131"
+foreground_color = "#f0f0f0"
 
 shift_last_press, current_mode, current_selection = 0, "text_editor", 0
 current_directory, font_settings = os.getcwd(), ("Consolas", 12)
 
 root = tk.Tk()
-text_editor_frame, numbers_frame = tk.Frame(root), tk.Frame(root)
-file_listbox = tk.Listbox(text_editor_frame, selectmode=tk.SINGLE)
-text_area = tk.Text(text_editor_frame, background='#313131', foreground='#f0f0f0', insertbackground='#f0f0f0', font=font_settings)
-line_numbers = tk.Text(numbers_frame, padx=5, takefocus=0, border=0, background='#313131', foreground='#f0f0f0', state='disabled')
+text_editor_frame = tk.Frame(root)
+numbers_frame = tk.Frame(root)
+file_listbox = tk.Listbox(text_editor_frame, selectmode=tk.SINGLE, background=background_color, foreground=foreground_color)
+text_area = tk.Text(text_editor_frame, background=background_color, foreground=foreground_color, insertbackground=foreground_color, font=font_settings)
+line_numbers = tk.Text(numbers_frame, padx=5, takefocus=0, border=0, background=background_color, foreground=foreground_color, state='disabled', font=font_settings)
 screen_width, screen_height = root.winfo_screenwidth(), root.winfo_screenheight()
 
 
@@ -64,6 +71,10 @@ def read_file_content(filename):
     if os.path.isfile(file_path):
         with open(file_path, 'r', encoding='iso-8859-1') as file:
             content = file.read()
+
+            # syntax-highlighting
+            Percolator(text_area).insertfilter(ColorDelegator())
+            
             text_area.delete('1.0', tk.END)
             file_listbox.forget()
             text_area.pack(fill=tk.BOTH, expand=True)
@@ -77,7 +88,7 @@ def read_file_content(filename):
         print(f"File {filename} not found in the current directory.")
 
 def create_window():
-    root.geometry(f"{screen_width // 2}x{screen_height}+0+0")
+    root.geometry(f"{screen_width // 2}x{screen_height - 100}+0+0")
     root.title("File Editor")
     numbers_frame.pack(side=tk.LEFT, fill=tk.Y)
     text_editor_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
