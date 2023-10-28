@@ -15,14 +15,14 @@ def handle_double_shift(event):
     if event.time - shift_last_press < 250:
         if current_mode == "text":
             current_mode = "file"
-            text_area.pack_forget()
-            file_listbox.pack(fill=tk.BOTH, expand=True)
+            hide_text_area()
+            show_file_listbox()
             display_files_in_directory()
             update_bottom_bar_text()
         elif current_mode == "file":
             current_mode = "text"
-            file_listbox.delete(0, tk.END)
-            text_area.pack(fill=tk.BOTH, expand=True)
+            hide_file_listbox()
+            show_text_area()
             update_bottom_bar_text()
     shift_last_press = event.time
 
@@ -76,14 +76,15 @@ def read_file_content(filename):
             content = file.read()
             current_file = os.path.basename(file.name)
 
-            # syntax-highlighting
-            Percolator(text_area).insertfilter(ColorDelegator())
-            
+            hide_file_listbox()
+            show_text_area()
+
+            percolator = Percolator(text_area)
+            percolator.insertfilter(ColorDelegator())
+
             text_area.delete('1.0', tk.END)
-            file_listbox.forget()
-            text_area.pack(fill=tk.BOTH, expand=True)
             text_area.insert(tk.END, content)
-            line_numbers.pack(side=tk.LEFT, fill=tk.Y)
+            show_line_numbers()
             update_line_numbers()
             update_bottom_bar_text()
     elif os.path.isdir(file_path):
@@ -117,4 +118,31 @@ def update_bottom_bar_text():
         bottom_text_label.config(text=label_text[:-3])
     else:
         bottom_text_label = tk.Label(bottom_bar_frame, text=label_text[:-3], fg="white", bg="black", anchor='w')
-        bottom_text_label.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
+        show_bottom_text_label()
+
+def hide_text_area():
+    text_area.pack_forget()
+
+def show_text_area():
+    text_area.pack(fill=tk.BOTH, expand=True)
+    text_area.focus_set()
+    text_area.see('1.0')
+
+def hide_file_listbox():
+    file_listbox.pack_forget()
+
+def show_file_listbox():
+    file_listbox.pack(fill=tk.BOTH, expand=True)
+    file_listbox.focus_set()
+
+def hide_bottom_text_label():
+    bottom_text_label.pack_forget()
+
+def show_bottom_text_label():
+    bottom_text_label.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
+
+def hide_line_numbers():
+    line_numbers.pack_forget()
+
+def show_line_numbers():
+    line_numbers.pack(side=tk.LEFT, fill=tk.Y)
