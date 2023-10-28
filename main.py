@@ -1,6 +1,5 @@
-import tkinter as tk
-from frames import text_editor_frame, numbers_frame, bottom_bar_frame, file_listbox, text_area, line_numbers
-from functions import *
+from frames import root
+from functions import display_files_in_directory, update_bottom_bar_text, handle_double_shift, handle_key_event, save_file 
 
 if __name__ == "__main__":
     display_files_in_directory()
@@ -10,4 +9,8 @@ if __name__ == "__main__":
     root.bind("<w>", lambda event: handle_key_event(event, "w"))
     root.bind("<s>", lambda event: handle_key_event(event, "s"))
     root.bind("<e>", lambda event: handle_key_event(event, "e"))
+    root.bind("<q>", lambda event: handle_key_event(event, "q"))
+    root.bind("<Control-s>", lambda event: save_file())
+
+    root.iconbitmap('l-solid.ico')
     root.mainloop()

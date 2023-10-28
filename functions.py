@@ -2,13 +2,13 @@ from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 
 from frames import *
-from main import *
 
 current_directory = os.getcwd() 
 current_file = None
 current_mode = "file"
 bottom_text_label = None
 current_selection = 0
+shift_last_press = 0
 
 def handle_double_shift(event):
     global shift_last_press, current_mode
@@ -17,15 +17,17 @@ def handle_double_shift(event):
             current_mode = "file"
             text_area.pack_forget()
             file_listbox.pack(fill=tk.BOTH, expand=True)
+            display_files_in_directory()
             update_bottom_bar_text()
         elif current_mode == "file":
             current_mode = "text"
             file_listbox.delete(0, tk.END)
             text_area.pack(fill=tk.BOTH, expand=True)
+            update_bottom_bar_text()
     shift_last_press = event.time
 
 def handle_key_event(event, key):
-    global current_selection
+    global current_selection, current_mode, current_directory
     if current_mode == "file":
         if key == "w" and current_selection > 0:
             current_selection -= 1
@@ -34,6 +36,9 @@ def handle_key_event(event, key):
         elif key == "e":
             selected_file = file_listbox.get(current_selection)
             read_file_content(selected_file)
+        elif key == "q" and current_directory != os.path.expanduser("~"):
+            current_directory = os.path.dirname(current_directory)
+            display_files_in_directory()
 
         if key in ["w", "s"]:
             file_listbox.select_clear(0, tk.END)
@@ -43,9 +48,27 @@ def handle_key_event(event, key):
 def display_files_in_directory():
     file_listbox.delete(0, tk.END)
     for file in os.listdir(current_directory):
-        file_listbox.insert(tk.END, file)
+        if (os.path.isdir(file)):
+            file_listbox.insert(tk.END, u'\N{FOLDER} ' + file)
+        else:
+            file_listbox.insert(tk.END, u'\N{PAGE FACING UP} ' + file)
+
+def save_file():
+    global current_directory, current_file
+    if current_file:
+        file_path = os.path.join(current_directory, current_file)
+        with open(file_path, 'w', encoding='utf-8') as file:
+            content = text_area.get('1.0', tk.END)
+            file.write(content)
+    else:
+        print("No file is currently open. Save operation aborted.")
 
 def read_file_content(filename):
+    if '\N{FOLDER}' in filename or '/..' in filename: 
+        filename = filename.split('\N{FOLDER}')[1].split('/..')[0].replace(" ", "")
+        print(filename)
+    elif '\N{PAGE FACING UP}' in filename:
+        filename = filename.split('\N{PAGE FACING UP}')[1].replace(" ", "")
     global current_directory, current_file
     file_path = os.path.join(current_directory, filename)
     if os.path.isfile(file_path):
@@ -73,7 +96,7 @@ def update_line_numbers():
     line_numbers.config(state='normal')
     line_numbers.delete('1.0', tk.END)
     _, yview = text_area.yview()
-    lines = text_area.get('1.0', 'end').count('\n') + 1
+    lines = text_area.get('1.0', 'end').count('\n')
     num_digits = len(str(lines))
 
     for i in range(1, lines + 1):
