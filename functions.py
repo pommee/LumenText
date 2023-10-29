@@ -2,6 +2,8 @@ import os
 
 from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
+from tkinter import TclError
+
 from frames import *
 
 cd = ColorDelegator()
@@ -59,12 +61,15 @@ def handle_key_event(event, key):
 
 
 def display_files_in_directory():
+    global current_selection
     file_listbox.delete(0, tk.END)
+    current_selection = 0
     for file in os.listdir(current_directory):
         if os.path.isdir(file):
             file_listbox.insert(tk.END, u'\N{FOLDER} ' + file)
         else:
             file_listbox.insert(tk.END, u'\N{PAGE FACING UP} ' + file)
+    file_listbox.selection_set(0)
 
 
 def save_file():
@@ -81,7 +86,6 @@ def save_file():
 def read_file_content(filename):
     if '\N{FOLDER}' in filename or '/..' in filename:
         filename = filename.split('\N{FOLDER}')[1].split('/..')[0].replace(" ", "")
-        print(filename)
     elif '\N{PAGE FACING UP}' in filename:
         filename = filename.split('\N{PAGE FACING UP}')[1].replace(" ", "")
     global current_directory, current_file
@@ -94,7 +98,10 @@ def read_file_content(filename):
             hide_file_listbox()
             show_text_area()
 
-            Percolator(text_area).insertfilter(cd)
+            try:
+                Percolator(text_area).insertfilter(cd)
+            except TclError:
+                print("Error")
 
             text_area.delete('1.0', tk.END)
             text_area.insert(tk.END, content)
