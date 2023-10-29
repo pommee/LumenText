@@ -1,0 +1,11 @@
+{
+  "font": {
+    "font_family": "TkFixedFont",
+    "font_size": 14
+  },
+  "theme": {
+    "foreground_color": "#f0f0f0",
+    "background_color": "#212121",
+    "highlight_color": "#313131"
+  }
+}

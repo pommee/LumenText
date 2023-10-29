@@ -1,10 +1,23 @@
+import json
 import tkinter as tk
 
-font_family = "Consolas"
-font_size = 12
-background_color = "#212121"
-foreground_color = "#f0f0f0"
-highlight_color = "#313131"
+
+def load_user_settings():
+    with open("settings.json", 'r') as file:
+        settings = json.load(file)
+        return settings
+
+
+user_settings = load_user_settings()
+
+font_settings = user_settings["font"]
+theme_settings = user_settings["theme"]
+
+font_family = font_settings["font_family"]
+font_size = font_settings["font_size"]
+background_color = theme_settings["background_color"]
+foreground_color = theme_settings["foreground_color"]
+highlight_color = theme_settings["highlight_color"]
 
 # Create Tkinter Window
 root = tk.Tk()
@@ -22,7 +35,7 @@ file_listbox = tk.Listbox(
     selectmode=tk.SINGLE,
     background=background_color,
     foreground=foreground_color,
-    font=("Consolas", 20)
+    font=(font_family, font_size)
 )
 text_area = tk.Text(
     text_editor_frame,

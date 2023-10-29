@@ -162,7 +162,7 @@ def adjust_font_size(event):
     elif event.keysym == "minus":
         updated_font_size = max(1, current_font_size - 1)
 
-    font_settings = ((font_family, font_size), updated_font_size)
+    font_settings = (font_family, updated_font_size)
     text_area.config(font=font_settings)
     line_numbers.config(font=font_settings)
 
