@@ -4,6 +4,15 @@ from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 from frames import *
 
+cd = ColorDelegator()
+
+# Override background color, white by default
+cd.tagdefs['COMMENT'] = {'foreground': '#FF0000', 'background': '#313131'}
+cd.tagdefs['KEYWORD'] = {'foreground': '#007F00', 'background': '#313131'}
+cd.tagdefs['BUILTIN'] = {'foreground': '#7F7F00', 'background': '#313131'}
+cd.tagdefs['STRING'] = {'foreground': '#7F3F00', 'background': '#313131'}
+cd.tagdefs['DEFINITION'] = {'foreground': '#007F7F', 'background': '#313131'}
+
 current_directory = os.getcwd()
 current_file = None
 current_mode = "file"
@@ -85,8 +94,7 @@ def read_file_content(filename):
             hide_file_listbox()
             show_text_area()
 
-            percolator = Percolator(text_area)
-            percolator.insertfilter(ColorDelegator())
+            Percolator(text_area).insertfilter(cd)
 
             text_area.delete('1.0', tk.END)
             text_area.insert(tk.END, content)
