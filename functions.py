@@ -1,10 +1,10 @@
 import os
-
-from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
+from idlelib.percolator import Percolator
 from tkinter import TclError
 
-from frames import *
+from frames import background_color, file_listbox, text_area, line_numbers, highlight_color, tk, bottom_bar_frame, \
+    font_family, font_size
 
 cd = ColorDelegator()
 
@@ -149,6 +149,22 @@ def highlight_current_line(event):
     current_cursor_pos = f"{current_line_num}.0"
     text_area.tag_add("highlight", current_cursor_pos, current_cursor_pos + " lineend")
     text_area.tag_config("highlight", background=highlight_color)
+
+
+def adjust_font_size(event):
+    current_font_size = text_area.cget("font")
+    current_font_size = current_font_size.split()[-1]
+    current_font_size = int(current_font_size)
+    updated_font_size = current_font_size
+
+    if event.keysym == "plus":
+        updated_font_size = current_font_size + 1
+    elif event.keysym == "minus":
+        updated_font_size = max(1, current_font_size - 1)
+
+    font_settings = ((font_family, font_size), updated_font_size)
+    text_area.config(font=font_settings)
+    line_numbers.config(font=font_settings)
 
 
 def hide_text_area():

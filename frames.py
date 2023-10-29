@@ -1,9 +1,10 @@
 import tkinter as tk
 
+font_family = "Consolas"
+font_size = 12
 background_color = "#212121"
 foreground_color = "#f0f0f0"
 highlight_color = "#313131"
-font_settings = ("Consolas", 12)
 
 # Create Tkinter Window
 root = tk.Tk()
@@ -28,7 +29,7 @@ text_area = tk.Text(
     background=background_color,
     foreground=foreground_color,
     insertbackground=foreground_color,
-    font=font_settings,
+    font=(font_family, font_size),
     borderwidth=0,
     wrap='none'
 )
@@ -40,7 +41,7 @@ line_numbers = tk.Text(
     background=background_color,
     foreground=foreground_color,
     state='disabled',
-    font=font_settings
+    font=(font_family, font_size)
 )
 
 # Pack Widgets
