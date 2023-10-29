@@ -130,8 +130,8 @@ def update_line_numbers():
 def update_bottom_bar_text():
     global bottom_text_label
     text = {
-        "file": current_file,
-        "mode": current_mode
+        "mode": current_mode,
+        "file": current_file
     }
     label_text = ""
     for key, value in text.items():
@@ -141,6 +141,14 @@ def update_bottom_bar_text():
     else:
         bottom_text_label = tk.Label(bottom_bar_frame, text=label_text[:-3], fg="white", bg="black", anchor='w')
         show_bottom_text_label()
+
+
+def highlight_current_line(event):
+    text_area.tag_remove("highlight", "1.0", "end")
+    current_line_num = text_area.index("insert").split(".")[0]
+    current_cursor_pos = f"{current_line_num}.0"
+    text_area.tag_add("highlight", current_cursor_pos, current_cursor_pos + " lineend")
+    text_area.tag_config("highlight", background=highlight_color)
 
 
 def hide_text_area():

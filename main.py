@@ -1,5 +1,5 @@
-from frames import root
-from functions import display_files_in_directory, update_bottom_bar_text, handle_double_shift, handle_key_event, save_file 
+from frames import root, text_area
+from functions import display_files_in_directory, update_bottom_bar_text, handle_double_shift, handle_key_event, save_file, highlight_current_line
 
 if __name__ == "__main__":
     display_files_in_directory()
@@ -12,5 +12,8 @@ if __name__ == "__main__":
     root.bind("<q>", lambda event: handle_key_event(event, "q"))
     root.bind("<Control-s>", lambda event: save_file())
 
+    text_area.bind("<KeyRelease>", highlight_current_line)
+
     root.iconbitmap('./resources/l-solid.ico')
     root.mainloop()
+

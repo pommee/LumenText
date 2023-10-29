@@ -1,7 +1,8 @@
 import tkinter as tk
 
-background_color = "#313131"
+background_color = "#212121"
 foreground_color = "#f0f0f0"
+highlight_color = "#313131"
 font_settings = ("Consolas", 12)
 
 # Create Tkinter Window
