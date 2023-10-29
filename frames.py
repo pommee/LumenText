@@ -1,5 +1,4 @@
 import tkinter as tk
-import os
 
 background_color = "#313131"
 foreground_color = "#f0f0f0"
@@ -16,9 +15,32 @@ numbers_frame = tk.Frame(root)
 bottom_bar_frame = tk.Frame(root, bg="black", height=30)
 
 # Initialize Widgets
-file_listbox = tk.Listbox(text_editor_frame, selectmode=tk.SINGLE, background=background_color, foreground=foreground_color, font=("Consolas", 20))
-text_area = tk.Text(text_editor_frame, background=background_color, foreground=foreground_color, insertbackground=foreground_color, font=font_settings, borderwidth=0, wrap='none')
-line_numbers = tk.Text(numbers_frame, padx=5, takefocus=0, border=0, background=background_color, foreground=foreground_color, state='disabled', font=font_settings)
+file_listbox = tk.Listbox(
+    text_editor_frame,
+    selectmode=tk.SINGLE,
+    background=background_color,
+    foreground=foreground_color,
+    font=("Consolas", 20)
+)
+text_area = tk.Text(
+    text_editor_frame,
+    background=background_color,
+    foreground=foreground_color,
+    insertbackground=foreground_color,
+    font=font_settings,
+    borderwidth=0,
+    wrap='none'
+)
+line_numbers = tk.Text(
+    numbers_frame,
+    padx=5,
+    takefocus=0,
+    border=0,
+    background=background_color,
+    foreground=foreground_color,
+    state='disabled',
+    font=font_settings
+)
 
 # Pack Widgets
 bottom_bar_frame.pack(side=tk.BOTTOM, fill=tk.X)
