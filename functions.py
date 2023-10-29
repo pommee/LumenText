@@ -43,7 +43,6 @@ def handle_key_event(event, key):
         elif key == "s" and current_selection < file_listbox.size() - 1:
             current_selection += 1
         elif key == "e":
-            current_mode = "text"
             selected_file = file_listbox.get(current_selection)
             read_file_content(selected_file)
         elif key == "q" and current_directory != os.path.expanduser("~"):
@@ -80,9 +79,11 @@ def save_file():
 
 
 def read_file_content(filename):
+    global current_mode
     if '\N{FOLDER}' in filename or '/..' in filename:
         filename = filename.split('\N{FOLDER}')[1].split('/..')[0].replace(" ", "")
     elif '\N{PAGE FACING UP}' in filename:
+        current_mode = "text"
         filename = filename.split('\N{PAGE FACING UP}')[1].replace(" ", "")
     global current_directory, current_file
     file_path = os.path.join(current_directory, filename)
