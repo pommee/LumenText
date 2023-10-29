@@ -9,11 +9,11 @@ from frames import *
 cd = ColorDelegator()
 
 # Override background color, white by default
-cd.tagdefs['COMMENT'] = {'foreground': '#FF0000', 'background': '#313131'}
-cd.tagdefs['KEYWORD'] = {'foreground': '#007F00', 'background': '#313131'}
-cd.tagdefs['BUILTIN'] = {'foreground': '#7F7F00', 'background': '#313131'}
-cd.tagdefs['STRING'] = {'foreground': '#7F3F00', 'background': '#313131'}
-cd.tagdefs['DEFINITION'] = {'foreground': '#007F7F', 'background': '#313131'}
+cd.tagdefs['COMMENT'] = {'foreground': '#FF0000', 'background': background_color}
+cd.tagdefs['KEYWORD'] = {'foreground': '#007F00', 'background': background_color}
+cd.tagdefs['BUILTIN'] = {'foreground': '#7F7F00', 'background': background_color}
+cd.tagdefs['STRING'] = {'foreground': '#7F3F00', 'background': background_color}
+cd.tagdefs['DEFINITION'] = {'foreground': '#007F7F', 'background': background_color}
 
 current_directory = os.getcwd()
 current_file = None
@@ -32,11 +32,6 @@ def handle_double_shift(event):
             show_file_listbox()
             display_files_in_directory()
             update_bottom_bar_text()
-        elif current_mode == "file":
-            current_mode = "text"
-            hide_file_listbox()
-            show_text_area()
-            update_bottom_bar_text()
     shift_last_press = event.time
 
 
@@ -48,6 +43,7 @@ def handle_key_event(event, key):
         elif key == "s" and current_selection < file_listbox.size() - 1:
             current_selection += 1
         elif key == "e":
+            current_mode = "text"
             selected_file = file_listbox.get(current_selection)
             read_file_content(selected_file)
         elif key == "q" and current_directory != os.path.expanduser("~"):
@@ -101,6 +97,8 @@ def read_file_content(filename):
             try:
                 Percolator(text_area).insertfilter(cd)
             except TclError:
+                # TODO: Initialized once, once more not needed.
+                #       Maybe do this outside on the first run?
                 print("Error")
 
             text_area.delete('1.0', tk.END)
